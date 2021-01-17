@@ -1,61 +1,89 @@
-public class TennisGame {
 
-    public static String getScore(String player1Name, String player2Name, int m_score1, int m_score2) {
-        String score = "";
-        int tempScore=0;
-        if (m_score1==m_score2)
-        {
-            switch (m_score1)
-            {
+
+public class TennisGame {
+    // condition to end game
+    public static final int HIGHEST_SCORE = 4;
+
+    public static String differScore(int SCORE_OF_PLAYER1, int SCORE_OF_PLAYER2) {
+        // score game
+        int tempScore = 0;
+        String setScore = "";
+        for (int scoreOfRoundPlay = 1; scoreOfRoundPlay < 3; scoreOfRoundPlay++) {
+            if (scoreOfRoundPlay == 1) tempScore = SCORE_OF_PLAYER1;
+            else {
+                setScore += "-";
+                tempScore = SCORE_OF_PLAYER2;
+            }
+            switch (tempScore) {
                 case 0:
-                    score = "Love-All";
+                    setScore += "Love";
                     break;
                 case 1:
-                    score = "Fifteen-All";
+                    setScore += "Fifteen";
                     break;
                 case 2:
-                    score = "Thirty-All";
+                    setScore += "Thirty";
                     break;
                 case 3:
-                    score = "Forty-All";
+                    setScore += "Forty";
                     break;
-                default:
-                    score = "Deuce";
-                    break;
+            }
+        }
+        return setScore;
+    }
 
+    public static int minusTwoPlayer(int SCORE_OF_PLAYER1, int SCORE_OF_PLAYER2) {
+        return SCORE_OF_PLAYER1 - SCORE_OF_PLAYER2;
+    }
+
+    public static String tieGame(int SCORE_OF_PLAYER) {
+        String setScore = "";
+        switch (SCORE_OF_PLAYER) {
+            case 0:
+                setScore = "Love-All";
+                break;
+            case 1:
+                setScore = "Fifteen-All";
+                break;
+            case 2:
+                setScore = "Thirty-All";
+                break;
+            case 3:
+                setScore = "Forty-All";
+                break;
+            default:
+                setScore = "Deuce";
+                break;
+
+        }
+        return setScore;
+    }
+
+    public static String winnerOfGame(int SCORE_OF_PLAYER1, int SCORE_OF_PLAYER2) {
+        String result = "";
+        int scoreOfGame = minusTwoPlayer(SCORE_OF_PLAYER1, SCORE_OF_PLAYER2);
+        if (scoreOfGame == 1) result = "Advantage player1";
+        else if (scoreOfGame == -1) result = "Advantage player2";
+        else if (scoreOfGame >= 2) result = "Win for player1";
+        else result = "Win for player2";
+        return result;
+    }
+
+    public static String getScore(String player1Name, String player2Name, int SCORE_OF_PLAYER1, int SCORE_OF_PLAYER2) {
+        boolean equalScore = (SCORE_OF_PLAYER1 == SCORE_OF_PLAYER2);
+        boolean compareToHighestScore = (SCORE_OF_PLAYER1 >= HIGHEST_SCORE || SCORE_OF_PLAYER2 >= HIGHEST_SCORE); //End Game
+        String resultOfGame = "";
+        if (equalScore) {
+            resultOfGame = tieGame(SCORE_OF_PLAYER1);
+        }
+        else {
+            if (compareToHighestScore) {
+                resultOfGame = winnerOfGame(SCORE_OF_PLAYER1, SCORE_OF_PLAYER2);
+            } else {
+                resultOfGame = differScore(SCORE_OF_PLAYER1, SCORE_OF_PLAYER2);
             }
         }
-        else if (m_score1>=4 || m_score2>=4)
-        {
-            int minusResult = m_score1-m_score2;
-            if (minusResult==1) score ="Advantage player1";
-            else if (minusResult ==-1) score ="Advantage player2";
-            else if (minusResult>=2) score = "Win for player1";
-            else score ="Win for player2";
-        }
-        else
-        {
-            for (int i=1; i<3; i++)
-            {
-                if (i==1) tempScore = m_score1;
-                else { score+="-"; tempScore = m_score2;}
-                switch(tempScore)
-                {
-                    case 0:
-                        score+="Love";
-                        break;
-                    case 1:
-                        score+="Fifteen";
-                        break;
-                    case 2:
-                        score+="Thirty";
-                        break;
-                    case 3:
-                        score+="Forty";
-                        break;
-                }
-            }
-        }
-        return score;
+
+        return resultOfGame;
     }
 }
